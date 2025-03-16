@@ -7,8 +7,8 @@ export const apiSlice = createApi({
     baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/api/v1`,
     prepareHeaders: async (headers) => {
       const session = await getSession(); 
-      if (session && session.user && session.user) {
-        headers.set("Authorization", `Bearer ${session.user}`);
+      if (session?.user.token) {
+        headers.set("Authorization", `Bearer ${session.user.token}`);
       }
       return headers;
     },

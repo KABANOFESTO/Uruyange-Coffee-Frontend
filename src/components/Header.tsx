@@ -38,11 +38,11 @@ export default function Header() {
                         <li><Link href="/contact" className={`${pathname === "/contact" ? "text-yellow-600" : "text-white"} hover:text-yellow-600 flex items-center space-x-2`}><FaAddressBook /> <span>Contact</span></Link></li>
                     </ul>
                     <div className="mt-4 lg:mt-0 flex flex-col lg:flex-row lg:items-center lg:space-x-4">
-                        <Link href="/dashboard" className={`${pathname === "/dashboard" ? "text-yellow-600" : "text-white"} flex items-center space-x-2 hover:text-gray-300`}>
+                        {/* <Link href="/dashboard" className={`${pathname === "/dashboard" ? "text-yellow-600" : "text-white"} flex items-center space-x-2 hover:text-gray-300`}>
                             <FaTachometerAlt /> <span>Dashboard</span>
-                        </Link>
-                        <Link href="/subscription">
-                            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+                        </Link> */}
+                        <Link href="/auth">
+                            <button className="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
                                 <FaRocket /> <span>Get Started</span>
                             </button>
                         </Link>
