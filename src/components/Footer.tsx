@@ -1,0 +1,91 @@
+import Link from 'next/link';
+import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+
+export default function Footer() {
+  return (
+    <footer className="bg-gray-800 text-white py-10 px-5 sm:px-10">
+      {/* Main Footer Content */}
+      <div className="container mx-auto flex flex-wrap justify-between gap-8">
+        {/* Customer Service Section */}
+        <div className="flex-1 min-w-[200px] mb-8">
+          <h4 className="font-bold text-lg mb-4">Customer Service</h4>
+          <ul className="space-y-2">
+            <li><Link href="/FAQ" className="hover:text-gray-300 transition-colors">FAQ</Link></li>
+            <li><Link href="/contact" className="hover:text-gray-300 transition-colors">Contact Us</Link></li>
+            <li><Link href="/refund-policy" className="hover:text-gray-300 transition-colors">Refund Policy</Link></li>
+            <li><Link href="/privacy-policy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link></li>
+            <li><Link href="/terms" className="hover:text-gray-300 transition-colors">Terms of Service</Link></li>
+            <li><Link href="/wholesale" className="hover:text-gray-300 transition-colors">Wholesale</Link></li>
+          </ul>
+        </div>
+
+        {/* Learn Section */}
+        <div className="flex-1 min-w-[200px] mb-8">
+          <h4 className="font-bold text-lg mb-4">Learn</h4>
+          <ul className="space-y-2">
+            <li><Link href="/about" className="hover:text-gray-300 transition-colors">About Us</Link></li>
+            <li><Link href="/careers" className="hover:text-gray-300 transition-colors">Careers</Link></li>
+            <li><Link href="/contact" className="hover:text-gray-300 transition-colors">Contact Us</Link></li>
+            <li><Link href="/blog" className="hover:text-gray-300 transition-colors">Blog</Link></li>
+            <li><Link href="/press" className="hover:text-gray-300 transition-colors">Press</Link></li>
+            <li><Link href="/give-get" className="hover:text-gray-300 transition-colors">Give $5, Get $5</Link></li>
+          </ul>
+        </div>
+
+        {/* Contact Section */}
+        <div className="flex-1 min-w-[200px] mb-8">
+          <h4 className="font-bold text-lg mb-4">CONTACT WITH US</h4>
+          <div className="flex gap-4 mb-4">
+            <a href="#" className="text-white hover:text-gray-300 transition-colors">
+              <FaFacebook size={24} />
+            </a>
+            <a href="#" className="text-white hover:text-gray-300 transition-colors">
+              <FaInstagram size={24} />
+            </a>
+            <a href="#" className="text-white hover:text-gray-300 transition-colors">
+              <FaTwitter size={24} />
+            </a>
+          </div>
+          <p className="font-semibold">SUPPORT</p>
+          <a href="tel:+250783227490" className="text-white hover:text-gray-300 transition-colors">
+            0783227490
+          </a>
+        </div>
+      </div>
+
+      {/* Footer Bottom Section */}
+      <div className="container mx-auto mt-10 text-center">
+        <p className="text-gray-300">
+          We're located in The West End— a historic MMM <br />
+          neighborhood with a rich history of black entrepreneurs <br />
+          and culture. We're honored to have you as a partner <br />
+          in this journey to revitalize black and brown entrepreneurship.
+        </p>
+      </div>
+
+      {/* Divider */}
+      <hr className="border-gray-600 my-8" />
+
+      {/* Footer Links */}
+      <div className="container mx-auto flex flex-wrap justify-between gap-4 text-sm">
+        <div className="flex flex-wrap gap-4">
+          <Link href="/terms" className="text-white hover:text-gray-300 transition-colors">
+            Terms & Conditions
+          </Link>
+          <Link href="/privacy-policy" className="text-white hover:text-gray-300 transition-colors">
+            Privacy Policy
+          </Link>
+          <Link href="/do-not-sell" className="text-white hover:text-gray-300 transition-colors">
+            Do Not Sell My Info
+          </Link>
+          <Link href="/accessibility" className="text-white hover:text-gray-300 transition-colors">
+            Accessibility
+          </Link>
+        </div>
+        <div>
+          <p className="text-gray-300">© 2025 Uruyange Coffee</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
