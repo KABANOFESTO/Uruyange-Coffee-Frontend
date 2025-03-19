@@ -1,34 +1,35 @@
 import React from 'react';
+import Image from 'next/image';
 
 const steps = [
     {
         number: 1,
         title: 'Sign up on Uruyange Coffee',
-        description: 'Submit your completed project for evaluation',
+        description: 'Start enjoy The Subscription Service',
         image: '/images/ch1.JPG'
     },
     {
         number: 2,
-        title: 'Register and Participate',
-        description: 'Sign up for the challenge and start working on the project.',
+        title: 'Coose a Subscription',
+        description: 'Choose a subscription plan that suits your needs and budget',
         image: '/images/ch2.JPG'
     },
     {
         number: 3,
-        title: 'Browse Open Challenges',
-        description: 'Explore the range of challenges and hackathons and choose one that aligns with your interests and career goals',
+        title: 'Pay for your Subscription',
+        description: 'Pay for your subscription using our secure payment gateway',
         image: '/images/ch2.JPG'
     },
     {
         number: 4,
-        title: 'Submit your work',
-        description: 'Submit your completed project for evaluation',
+        title: 'Checkout Menus about our Coffee',
+        description: 'Then you can choose the coffee you want to buy',
         image: '/images/ch2.JPG'
     },
     {
         number: 5,
-        title: 'Receive Feedback and Recognition',
-        description: 'Get feedback on your work and celebrate your achievements',
+        title: 'Any Questions?',
+        description: 'Contact us for any questions or concerns',
         image: '/api/placeholder/280/200'
     }
 ];
@@ -63,10 +64,12 @@ const HowToGetStarted = () => {
                                 </p>
                                 {index === 0 || index === 2 ? (
                                     <div className="rounded-lg overflow-hidden border border-gray-200">
-                                        <img
+                                        <Image
                                             src={step.image}
+                                            width={350}   // or whatever size fits your design
+                                            height={350}
                                             alt={`Step ${step.number}`}
-                                            className="w-full h-48 object-cover"
+                                            className="object-cover"
                                         />
                                     </div>
                                 ) : null}

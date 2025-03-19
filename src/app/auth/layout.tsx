@@ -1,9 +1,8 @@
 "use client";
 
-import { Inter, Work_Sans } from "next/font/google";
+import { Work_Sans } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 
-const inter = Inter({ subsets: ["latin"] });
 const workSans = Work_Sans({
     variable: "--font-work-sans",
     subsets: ["latin"]

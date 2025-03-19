@@ -4,28 +4,33 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { ConfimrDialog } from "./confirmDialog";
 
 const items = [
     {
         title: "Home",
-        url: "/dashboard",
+        url: "/admin",
         icon: Home,
     },
     {
         title: "Coffee Management",
-        url: "/dashboard/coffee-management",
+        url: "/admin/coffee",
         icon: Coffee,
     },
     {
-        title: "Subscribers",
-        url: "/dashboard/subscribers",
+        title: "Subscribtions",
+        url: "/admin/subscribers",
+        icon: Users,
+    },
+    {
+        title: "Payments",
+        url: "/admin/payment",
         icon: Users,
     },
     {
         title: "Support",
-        url: "/dashboard/support",
+        url: "/admin/support",
         icon: HelpCircle,
     },
 ];
@@ -33,7 +38,7 @@ const items = [
 export default function SideBar() {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const params = usePathname();
-    const { data: userProfile, status } = useSession()
+    // const { data: userProfile, status } = useSession()
     const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
     const logoutFunc = async () => {

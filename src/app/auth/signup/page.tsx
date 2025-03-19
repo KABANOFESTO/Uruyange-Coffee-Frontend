@@ -36,13 +36,20 @@ const SignUp = () => {
                 } else {
                     toast.error(response.data.message || "Signup failed");
                 }
-            } catch (error) {
-                if (error && typeof error === 'object' && 'response' in error) {
-                    toast.error((error as any).response?.data?.message || "Failed to create account");
+            } catch (error: unknown) {
+                if (
+                    error &&
+                    typeof error === 'object' &&
+                    'response' in error &&
+                    (error as { response?: { data?: { message?: string } } }).response
+                ) {
+                    const err = error as { response?: { data?: { message?: string } } };
+                    toast.error(err.response?.data?.message || "Failed to create account");
                 } else {
                     toast.error("Failed to create account");
                 }
             }
+
             setSubmitting(false);
         },
     });

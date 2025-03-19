@@ -36,12 +36,12 @@ const About = () => {
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="w-full md:w-1/2">
               <div className="rounded-lg shadow-xl overflow-hidden">
-                <video 
+                <video
                   ref={videoRef}
-                  className="w-full h-[500px] object-cover" 
-                  autoPlay 
-                  muted 
-                  loop 
+                  className="w-full h-[500px] object-cover"
+                  autoPlay
+                  muted
+                  loop
                   playsInline
                 >
                   <source src="/images/vidvim.mp4" type="video/mp4" />
@@ -77,21 +77,21 @@ const About = () => {
               <p className="text-gray-600 mb-4">
                 Founded in partnership with Mubuga Coffee, Uruyange Coffee emerged
                 from a profound appreciation for the art of coffee cultivation. Our journey began in the rich
-                soils of Rwanda, specifically from the KIVU showers, where nature crafts some of the world's
+                soils of Rwanda, specifically from the KIVU showers, where nature crafts some of the world&rsquo;s
                 finest coffee beans.
               </p>
               <p className="text-gray-600">
-                We're more than just coffee suppliers—we're custodians of quality, offering
+                We&rsquo;re more than just coffee suppliers we&rsquo;re custodians of quality, offering
                 premium varieties including Anaerobic, Natural, and Fully Washed coffee to meet the
                 sophisticated needs of home brewers, café owners, and specialty coffee roasters alike.
               </p>
             </div>
             <div className="relative h-[400px] rounded-lg overflow-hidden shadow-xl">
-              <Image 
-                src="/images/1.8.jpg" 
-                alt="Coffee plantation" 
+              <Image
+                src="/images/1.8.jpg"
+                alt="Coffee plantation"
                 fill
-                style={{objectFit: 'cover'}}
+                style={{ objectFit: 'cover' }}
                 className="rounded-lg"
               />
             </div>
@@ -194,11 +194,11 @@ const About = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden">
-                <Image 
-                  src="/images/person3.webp" 
-                  alt="Team Member" 
+                <Image
+                  src="/images/person3.webp"
+                  alt="Team Member"
                   fill
-                  style={{objectFit: 'cover'}}
+                  style={{ objectFit: 'cover' }}
                   className="rounded-full"
                 />
               </div>
@@ -210,11 +210,11 @@ const About = () => {
             </div>
             <div className="text-center">
               <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden">
-                <Image 
-                  src="/images/person1.webp" 
-                  alt="Team Member" 
+                <Image
+                  src="/images/person1.webp"
+                  alt="Team Member"
                   fill
-                  style={{objectFit: 'cover'}}
+                  style={{ objectFit: 'cover' }}
                   className="rounded-full"
                 />
               </div>
@@ -226,11 +226,11 @@ const About = () => {
             </div>
             <div className="text-center">
               <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden">
-                <Image 
-                  src="/images/person2.webp" 
-                  alt="Team Member" 
+                <Image
+                  src="/images/person2.webp"
+                  alt="Team Member"
                   fill
-                  style={{objectFit: 'cover'}}
+                  style={{ objectFit: 'cover' }}
                   className="rounded-full"
                 />
               </div>
@@ -249,7 +249,7 @@ const About = () => {
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-4">Join Us on This Coffee Journey</h2>
           <p className="mb-8 max-w-2xl mx-auto">
-            At Uruyange Coffee, we believe that coffee is more than a beverage—it's an
+            At Uruyange Coffee, we believe that coffee is more than a beverage—it&rsquo;s an
             experience. Discover the perfect blend for your taste today.
           </p>
           <Link href="/ourcoffee" className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded shadow transition-colors">

@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaHome, FaCoffee, FaBox, FaInfoCircle, FaAddressBook, FaRocket, FaBars, FaTachometerAlt, FaTimes } from 'react-icons/fa';
+import { FaHome, FaCoffee, FaBox, FaInfoCircle, FaAddressBook, FaRocket, FaBars, FaTimes } from 'react-icons/fa';
 import { usePathname } from "next/navigation";
+import Image from 'next/image';
 
 export default function Header() {
     const [scrolled, setScrolled] = useState(false);
@@ -23,7 +24,14 @@ export default function Header() {
             <div className="container mx-auto flex justify-between items-center px-6">
                 <div className="logo">
                     <Link href="/">
-                        <img src="/images/logo-png.png" alt="Coffee Shop" className="h-16 w-16 rounded-full cursor-pointer hover:scale-105 transition-transform" />
+                        <Image
+                            src="/images/logo-png.png"
+                            alt="Coffee Shop"
+                            width={64}   // or whatever size fits your design
+                            height={64}
+                            className="h-16 w-16 rounded-full cursor-pointer hover:scale-105 transition-transform"
+                        />
+
                     </Link>
                 </div>
                 <div className="lg:hidden cursor-pointer" onClick={() => setMenuOpen(!menuOpen)}>
@@ -32,7 +40,15 @@ export default function Header() {
                 <div className={`lg:flex lg:items-center lg:space-x-6 absolute lg:static top-16 right-0 w-full lg:w-auto bg-gray-900 lg:bg-transparent p-4 lg:p-0 transition-all ${menuOpen ? 'block' : 'hidden'}`}>
                     <ul className="flex flex-col lg:flex-row lg:space-x-6 space-y-4 lg:space-y-0 text-white">
                         <li><Link href="/" className={`${pathname === "/" ? "text-yellow-600" : "text-white"} hover:text-yellow-600 flex items-center space-x-2`}><FaHome /> <span>Home</span></Link></li>
-                        <li><Link href="/ourcoffee" className={`${pathname === "/ourcoffee" ? "text-yellow-600" : "text-white"} hover:text-yellow-600 flex items-center space-x-2`}><FaCoffee /> <span>Our Coffee</span></Link></li>
+                        <li>
+                            <Link
+                                href="/ourcoffee"
+                                className={`${pathname === "/ourcoffee" || (pathname && pathname.startsWith("/coffees")) ? "text-yellow-600" : "text-white"} hover:text-yellow-600 flex items-center space-x-2`}
+                            >
+                                <FaCoffee /> <span>Our Coffee</span>
+                            </Link>
+                        </li>
+
                         <li><Link href="/subscription" className={`${pathname === "/subscription" ? "text-yellow-600" : "text-white"} hover:text-yellow-600 flex items-center space-x-2`}><FaBox /> <span>Subscription</span></Link></li>
                         <li><Link href="/about" className={`${pathname === "/about" ? "text-yellow-600" : "text-white"} hover:text-yellow-600 flex items-center space-x-2`}><FaInfoCircle /> <span>About Us</span></Link></li>
                         <li><Link href="/contact" className={`${pathname === "/contact" ? "text-yellow-600" : "text-white"} hover:text-yellow-600 flex items-center space-x-2`}><FaAddressBook /> <span>Contact</span></Link></li>

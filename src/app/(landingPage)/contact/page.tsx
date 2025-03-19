@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import { FaFacebook, FaInstagram, FaTwitter, FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
+import { useCreateMessageMutation } from '../../../lib/redux/slices/ContactSlice';
 
 interface FormData {
     name: string;
@@ -28,6 +29,9 @@ const ContactPage = () => {
         message: ''
     });
 
+    // Use the mutation hook
+    const [createMessage, { isLoading }] = useCreateMessageMutation();
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData({
@@ -45,21 +49,37 @@ const ContactPage = () => {
             message: 'Sending...'
         });
 
-        // Simulate form submission
-        setTimeout(() => {
+        try {
+            // Prepare the data to match the CreateMessageDTO interface
+            const createMessageDTO = {
+                name: formData.name,
+                email: formData.email,
+                description: formData.message,
+            };
+
+            // Call the mutation
+            await createMessage(createMessageDTO).unwrap();
+
+            // On success
             setFormStatus({
                 submitted: true,
                 success: true,
                 message: 'Thank you for your message! We will get back to you soon.'
             });
-
-            // Reset form after successful submission
             setFormData({
                 name: '',
                 email: '',
                 message: ''
             });
-        }, 1500);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            } else {
+                console.log(error);
+                setFormStatus({ submitted: true, success: false, message: 'Something went wrong. Please try again later.' });
+                throw error;
+            }
+        }
     };
 
     return (
@@ -120,8 +140,9 @@ const ContactPage = () => {
                                     <button
                                         type="submit"
                                         className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg shadow transition-colors"
+                                        disabled={isLoading} // Disable button while loading
                                     >
-                                        Send Message
+                                        {isLoading ? 'Sending...' : 'Send Message'}
                                     </button>
                                 </div>
                             </form>
@@ -225,7 +246,7 @@ const ContactPage = () => {
                     <div className="grid md:grid-cols-2 gap-6">
                         <div className="bg-white p-6 rounded-xl shadow-md">
                             <h3 className="text-xl font-bold mb-3 text-yellow-600">What are your business hours?</h3>
-                            <p className="text-gray-600">We're available Monday through Friday from 8:00 AM to 6:00 PM (Kigali time). On weekends, our hours are 10:00 AM to 4:00 PM.</p>
+                            <p className="text-gray-600">We&rsquo;re available Monday through Friday from 8:00 AM to 6:00 PM Kigali time. On weekends, our hours are 10:00 AM to 4:00 PM.</p>
                         </div>
 
                         <div className="bg-white p-6 rounded-xl shadow-md">

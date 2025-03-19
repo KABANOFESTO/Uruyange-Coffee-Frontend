@@ -8,8 +8,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const SignIn = () => {
-    const router = useRouter();
-    const { data: sessionData } = useSession();
+    useRouter();
+    useSession();
 
     useEffect(() => {
         getSession();
@@ -85,7 +85,7 @@ const SignIn = () => {
                 </form>
                 <div className="text-center">
                     <span className="text-sm text-gray-600">
-                        don't have an Account?{" "}
+                        don&rsquo;t have an Account?
                         <Link href="/auth/signup" className="text-black font-medium hover:underline">
                             Sign Up
                         </Link>

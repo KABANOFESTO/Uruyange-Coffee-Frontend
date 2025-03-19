@@ -37,7 +37,7 @@ export const authOptions = {
             createdAt: user.createdAt,
             token,
           };
-        } catch (error) {
+        } catch (Error) {
           throw new Error("Authentication failed. Please check your credentials.");
         }
       },

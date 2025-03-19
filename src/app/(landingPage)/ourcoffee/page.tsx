@@ -45,7 +45,7 @@ const OurCoffee: React.FC = () => {
               <div
                 key={coffee.name}
                 className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-all hover:scale-105 cursor-pointer"
-                onClick={() => router.push(`/subscription?type=${coffee.name}`)}
+                onClick={() => router.push(`/coffees`)}
               >
                 <Image
                   src={coffee.image}

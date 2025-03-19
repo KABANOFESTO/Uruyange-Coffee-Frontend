@@ -54,14 +54,13 @@ export default function Footer() {
       </div>
 
       {/* Footer Bottom Section */}
-      <div className="container mx-auto mt-10 text-center">
-        <p className="text-gray-300">
-          We're located in The West End— a historic MMM <br />
-          neighborhood with a rich history of black entrepreneurs <br />
-          and culture. We're honored to have you as a partner <br />
-          in this journey to revitalize black and brown entrepreneurship.
-        </p>
+      <div className="text-gray-300 space-y-2 text-center">
+        <p>We&rsquo;re located in The West End — a historic MMM</p>
+        <p>neighborhood with a rich history of black entrepreneurs</p>
+        <p>and culture. We&rsquo;re honored to have you as a partner</p>
+        <p>in this journey to revitalize black and brown entrepreneurship.</p>
       </div>
+
 
       {/* Divider */}
       <hr className="border-gray-600 my-8" />
