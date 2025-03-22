@@ -68,7 +68,7 @@ const MessagesPage = () => {
     }
 
     const messages = Array.isArray(messagesData?.data) ? messagesData.data : [];
-    const totalItems = messages.length;
+    // const totalItems = messages.length;
     // const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     console.log('messagesData:', messagesData);
