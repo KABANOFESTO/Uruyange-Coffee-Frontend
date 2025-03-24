@@ -305,7 +305,7 @@ const PaymentForm = () => {
                                 </h3>
 
                                 <form onSubmit={handleSubmit} className="space-y-6">
-                                    <div>
+                                    {/* <div>
                                         <label htmlFor="paymentMethod" className="block text-gray-700 font-medium mb-2">Payment Method</label>
                                         <select
                                             id="paymentMethod"
@@ -319,67 +319,8 @@ const PaymentForm = () => {
                                             <option value="blik">BLIK</option>
                                             <option value="apple_pay">Apple Pay</option>
                                         </select>
-                                    </div>
+                                    </div> */}
 
-                                    {formData.paymentMethod === 'card' && (
-                                        <div>
-                                            <label htmlFor="cardElement" className="block text-gray-700 font-medium mb-2">Card Details</label>
-                                            <CardElement
-                                                id="cardElement"
-                                                className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                options={{
-                                                    style: {
-                                                        base: {
-                                                            fontSize: '16px',
-                                                            color: '#424770',
-                                                            '::placeholder': {
-                                                                color: '#aab7c4',
-                                                            },
-                                                        },
-                                                        invalid: {
-                                                            color: '#9e2146',
-                                                        },
-                                                    },
-                                                }}
-                                            />
-                                        </div>
-                                    )}
-
-                                    {formData.paymentMethod === 'blik' && (
-                                        <div>
-                                            <label htmlFor="blikCode" className="block text-gray-700 font-medium mb-2">BLIK Code</label>
-                                            <input
-                                                type="text"
-                                                id="blikCode"
-                                                name="blikCode"
-                                                placeholder="Enter 6-digit BLIK code"
-                                                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                required
-                                                onChange={handleInputChange}
-                                            />
-                                        </div>
-                                    )}
-
-                                    {formData.paymentMethod === 'apple_pay' && (
-                                        <div id="apple-pay-button" className="mt-4">
-                                            {/* Apple Pay Button will be rendered here by Stripe.js */}
-                                        </div>
-                                    )}
-
-                                    <div>
-                                        <label htmlFor="email" className="block text-gray-700 font-medium mb-2">Email Address</label>
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            name="email"
-                                            placeholder="Enter your email address"
-                                            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            required
-                                            onChange={handleInputChange}
-                                            value={formData.email || user?.email || ''}
-                                            disabled={!!user?.email}
-                                        />
-                                    </div>
 
                                     <h3 className="text-2xl font-bold mt-8 mb-4">Delivery</h3>
 

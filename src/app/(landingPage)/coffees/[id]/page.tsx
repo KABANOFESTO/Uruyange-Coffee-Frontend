@@ -6,14 +6,20 @@ import { useRouter } from "next/navigation";
 import { useSingleCoffeeQuery } from "../../../../lib/redux/slices/CoffeeSlice";
 import { useCreatePaymentMutation } from "../../../../lib/redux/slices/PaymentSlice";
 import * as React from "react";
+import ShippingForm from "@/components/ShippingForm";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 interface CoffeePageProps {
   params: Promise<{ id: string }>;
 }
 
+
 const CoffeePage: React.FC<CoffeePageProps> = ({ params: paramsPromise }) => {
   const params = React.use(paramsPromise);
   const { id } = params;
+  const [isPay, setIsPay] = useState<boolean>(false)
+  const { data: session } = useSession()
 
   const { data: coffee, isLoading, isError } = useSingleCoffeeQuery(id);
   const [quantity, setQuantity] = useState(1);
@@ -21,6 +27,7 @@ const CoffeePage: React.FC<CoffeePageProps> = ({ params: paramsPromise }) => {
 
   // Payment mutation
   const [createPayment, { isLoading: isPaymentLoading }] = useCreatePaymentMutation();
+
 
   if (isLoading) {
     return (
@@ -92,6 +99,14 @@ const CoffeePage: React.FC<CoffeePageProps> = ({ params: paramsPromise }) => {
       alert("An error occurred during payment. Please try again.");
     }
   };
+
+  const handleVerify = ()=>{
+    if(session?.user){
+      setIsPay(true)
+    }else{
+      toast.error("You are not logged in !!  please login")
+    }
+  }
 
   return (
     <section className="pt-32 pb-16 bg-gray-50">
@@ -234,7 +249,7 @@ const CoffeePage: React.FC<CoffeePageProps> = ({ params: paramsPromise }) => {
                   </div>
 
                   <button
-                    onClick={handlePayNow}
+                    onClick={handleVerify}
                     disabled={isPaymentLoading}
                     className="flex-1 bg-black text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors disabled:bg-gray-400"
                   >
@@ -281,6 +296,9 @@ const CoffeePage: React.FC<CoffeePageProps> = ({ params: paramsPromise }) => {
           </div>
         </div>
       </div>
+      {isPay && (
+        <ShippingForm isPay={isPay} setIsPay={setIsPay} coffee={coffee} quantity={quantity} />
+      )}
     </section>
   );
 };
