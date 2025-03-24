@@ -13,13 +13,10 @@ const paymentApi = apiSlice.injectEndpoints({
         }),
 
         createPayment: builder.mutation({
-            query: ({ data, token }) => ({
+            query: (data) => ({
                 url: "/payments",
                 method: "POST",
-                body: data,
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                body: data
             }),
         }),
     }),
