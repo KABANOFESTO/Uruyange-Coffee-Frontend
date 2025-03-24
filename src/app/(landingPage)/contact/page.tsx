@@ -177,8 +177,8 @@ const ContactPage = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-gray-700">Email</h3>
-                                        <a href="mailto:info@uruyangecoffee.com" className="text-blue-600 hover:underline mt-1">
-                                            info@uruyangecoffee.com
+                                        <a href="mailto:marcellinabimana@gmail.com" className="text-blue-600 hover:underline mt-1">
+                                        marcellinabimana@gmail.com
                                         </a>
                                     </div>
                                 </div>
@@ -189,8 +189,8 @@ const ContactPage = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-gray-700">Phone</h3>
-                                        <a href="tel:+250783227490" className="text-blue-600 hover:underline mt-1">
-                                            +250 783 227 490
+                                        <a href="tel:+48452037323" className="text-blue-600 hover:underline mt-1">
+                                        +48452037323
                                         </a>
                                     </div>
                                 </div>

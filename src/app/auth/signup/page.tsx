@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import axios from "axios";
+import Image from "next/image";
 
 const SignUp = () => {
     const router = useRouter();
@@ -14,10 +15,14 @@ const SignUp = () => {
         initialValues: {
             email: "",
             password: "",
+            confirmPassword: "",
         },
         validationSchema: Yup.object({
             email: Yup.string().email("Invalid email").required("Email is required"),
             password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
+            confirmPassword: Yup.string()
+                .oneOf([Yup.ref("password"), undefined], "Passwords must match")
+                .required("Confirm Password is required"),
         }),
         onSubmit: async (values, { setSubmitting, resetForm }) => {
             try {
@@ -59,6 +64,19 @@ const SignUp = () => {
             <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6 space-y-6">
                 <div className="text-center">
                     <h1 className="text-3xl font-bold text-yellow-600">Create Account</h1>
+                </div>
+                <div className="logo flex justify-center">
+                    <Link href="/">
+                        <Image
+                            src="/images/home.avif"
+                            alt="Coffee Shop"
+                            width={64}
+                            height={64}
+                            className="h-16 w-16 rounded-full cursor-pointer hover:scale-105 transition-transform"
+                        />
+                    </Link>
+                </div>
+                <div className="text-center">
                     <p className="text-gray-600 text-sm">Sign up to get started</p>
                 </div>
                 <form onSubmit={signupFormik.handleSubmit} className="space-y-4">
@@ -90,6 +108,21 @@ const SignUp = () => {
                         />
                         {signupFormik.touched.password && signupFormik.errors.password && (
                             <p className="text-red-500 text-xs mt-1">{signupFormik.errors.password}</p>
+                        )}
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            placeholder="Confirm your password"
+                            className="w-full border border-gray-300 text-sm rounded-lg p-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+                            onChange={signupFormik.handleChange}
+                            onBlur={signupFormik.handleBlur}
+                            value={signupFormik.values.confirmPassword}
+                        />
+                        {signupFormik.touched.confirmPassword && signupFormik.errors.confirmPassword && (
+                            <p className="text-red-500 text-xs mt-1">{signupFormik.errors.confirmPassword}</p>
                         )}
                     </div>
                     <button

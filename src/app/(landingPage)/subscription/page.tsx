@@ -13,11 +13,30 @@ import b from "../../../../public/images/Americano.jpg";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 type PlanType = 'weekly' | 'monthly' | 'yearly';
+type CoffeeType = 'ground' | 'beans';
+type RoastPreference = 'light' | 'medium' | 'dark';
 
 interface PlanDetails {
     name: string;
     price: string;
     imageSrc: string;
+}
+
+interface PaymentData {
+    subscriptionType: PlanType;
+    email: string;
+    firstName: string;
+    lastName: string;
+    address: string;
+    apartment?: string;
+    city: string;
+    zipCode: string;
+    phone?: string;
+    receiveOffers: boolean;
+    paymentMethod: string;
+    paymentMethodId: string;
+    coffeeType: CoffeeType;
+    roastPreference: RoastPreference;
 }
 
 const SubscriptionPage = () => {
@@ -30,10 +49,14 @@ const SubscriptionPage = () => {
 
 const PaymentForm = () => {
     const router = useRouter();
-    const {status } = useSession();
+    const { data: session, status } = useSession();
     const isLoggedIn = status === 'authenticated';
 
     const [selectedPlan, setSelectedPlan] = useState<PlanType | null>(null);
+    const [selectedCoffeeType, setSelectedCoffeeType] = useState<CoffeeType | null>(null);
+    const [selectedRoast, setSelectedRoast] = useState<RoastPreference | null>(null);
+    const [showCoffeeTypeSelection, setShowCoffeeTypeSelection] = useState(false);
+    const [showRoastSelection, setShowRoastSelection] = useState(false);
     const [showPaymentForm, setShowPaymentForm] = useState(false);
     const [showLoginMessage, setShowLoginMessage] = useState(false);
 
@@ -47,7 +70,7 @@ const PaymentForm = () => {
     const [createPayment, { isLoading: isPaymentLoading, isSuccess: isPaymentSuccess }] = useCreatePaymentMutation();
 
     const [formData, setFormData] = useState({
-        email: '',
+        email: session?.user?.email || '',
         cardNumber: '',
         expiryDate: '',
         cvv: '',
@@ -60,6 +83,8 @@ const PaymentForm = () => {
         phone: '',
         receiveOffers: false,
         paymentMethod: 'card',
+        coffeeType: '' as CoffeeType,
+        roastPreference: '' as RoastPreference
     });
 
     const stripe = useStripe();
@@ -88,15 +113,12 @@ const PaymentForm = () => {
         name: string;
         price: number;
         billingCycle: string;
+        imageSrc: string;
     }
 
     interface SubscriptionsQueryResult {
         data: Subscription[];
         isLoading: boolean;
-    }
-
-    interface Subscription {
-        imageSrc: string;
     }
 
     const plans: Record<PlanType, PlanDetails[]> = subscriptions?.length
@@ -109,14 +131,15 @@ const PaymentForm = () => {
                     {
                         name: plan.name,
                         price: `$${plan.price}/${plan.name}`,
+                        imageSrc: plan.imageSrc
                     }
                 ]
             };
         }, {} as Record<PlanType, PlanDetails[]>)
         : {
-            weekly: Array.isArray(fallbackPlans.weekly) ? fallbackPlans.weekly : [fallbackPlans.weekly],
-            monthly: Array.isArray(fallbackPlans.monthly) ? fallbackPlans.monthly : [fallbackPlans.monthly],
-            yearly: Array.isArray(fallbackPlans.yearly) ? fallbackPlans.yearly : [fallbackPlans.yearly]
+            weekly: [fallbackPlans.weekly],
+            monthly: [fallbackPlans.monthly],
+            yearly: [fallbackPlans.yearly]
         };
 
     useEffect(() => {
@@ -137,7 +160,28 @@ const PaymentForm = () => {
             return;
         }
 
+        setShowCoffeeTypeSelection(true);
+        setTimeout(() => {
+            document.getElementById('coffee-type-selection')?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+    };
+
+    const handleCoffeeTypeSelect = (type: CoffeeType) => {
+        setSelectedCoffeeType(type);
+        setShowRoastSelection(true);
+        setTimeout(() => {
+            document.getElementById('roast-selection')?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+    };
+
+    const handleRoastSelect = (roast: RoastPreference) => {
+        setSelectedRoast(roast);
         setShowPaymentForm(true);
+        setFormData(prev => ({
+            ...prev,
+            coffeeType: selectedCoffeeType || 'ground',
+            roastPreference: roast
+        }));
         setTimeout(() => {
             document.getElementById('payment-form')?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
@@ -154,13 +198,27 @@ const PaymentForm = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!selectedPlan || !stripe || !elements) return;
+        if (!selectedPlan || !stripe || !elements || !selectedCoffeeType || !selectedRoast) {
+            alert('Please complete all selections before payment');
+            return;
+        }
 
         try {
-            const paymentData = {
+            const paymentData: PaymentData = {
                 subscriptionType: selectedPlan,
-                ...formData,
+                email: formData.email,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                address: formData.address,
+                apartment: formData.apartment,
+                city: formData.city,
+                zipCode: formData.zipCode,
+                phone: formData.phone,
+                receiveOffers: formData.receiveOffers,
+                paymentMethod: formData.paymentMethod,
                 paymentMethodId: '',
+                coffeeType: selectedCoffeeType,
+                roastPreference: selectedRoast
             };
 
             if (formData.paymentMethod === 'card') {
@@ -186,9 +244,9 @@ const PaymentForm = () => {
 
                 paymentData.paymentMethodId = paymentMethod.id;
             } else if (formData.paymentMethod === 'blik') {
-                paymentData.paymentMethodId = 'blik'; // Replace with actual BLIK logic
+                paymentData.paymentMethodId = 'blik';
             } else if (formData.paymentMethod === 'apple_pay') {
-                paymentData.paymentMethodId = 'apple_pay'; // Replace with actual Apple Pay logic
+                paymentData.paymentMethodId = 'apple_pay';
             }
 
             await createPayment(paymentData).unwrap();
@@ -215,12 +273,6 @@ const PaymentForm = () => {
                     <p className="mb-6 text-lg max-w-lg mx-auto">
                         Explore single-origin coffees from the best growers worldwide. Delivered fresh to your door.
                     </p>
-                    <button
-                        onClick={() => router.push("/plan")}
-                        className="bg-yellow-500 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-yellow-600 transition"
-                    >
-                        Start Your Journey
-                    </button>
                 </div>
             </section>
             <div className="pt-24 bg-gray-50 min-h-screen">
@@ -238,7 +290,7 @@ const PaymentForm = () => {
                                         <div key={`${key}-${index}`} className="p-8 bg-white shadow-lg rounded transition-all hover:shadow-xl">
                                             <div className="relative h-48 w-full mb-4">
                                                 <Image
-                                                    src={b}
+                                                    src={plan.imageSrc || b}
                                                     alt={plan.name}
                                                     fill
                                                     style={{ objectFit: 'cover' }}
@@ -294,34 +346,120 @@ const PaymentForm = () => {
                     </section>
                 )}
 
+                {showCoffeeTypeSelection && (
+                    <section id="coffee-type-selection" className="py-16 bg-gray-100">
+                        <div className="container mx-auto px-6">
+                            <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+                                <h2 className="text-3xl font-bold mb-6 text-center">Select Your Coffee Type</h2>
+                                <h3 className="text-xl mb-6 text-center">
+                                    Selected Plan: <span className="font-semibold text-blue-600">{selectedPlan && plans[selectedPlan][0].name}</span> - {selectedPlan && plans[selectedPlan][0].price}
+                                </h3>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                                    <div
+                                        className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedCoffeeType === 'ground' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-200 hover:border-yellow-300'}`}
+                                        onClick={() => handleCoffeeTypeSelect('ground')}
+                                    >
+                                        <div className="flex flex-col items-center">
+                                            <div className="h-24 w-24 mb-4">
+                                                <Image
+                                                    src="/images/C.webp"
+                                                    alt="Ground Coffee"
+                                                    width={96}
+                                                    height={96}
+                                                    className="rounded-full"
+                                                />
+                                            </div>
+                                            <h3 className="text-xl font-bold mb-2">Ground Coffee</h3>
+                                            <p className="text-gray-600 text-center">Perfect for drip machines and French presses</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedCoffeeType === 'beans' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-200 hover:border-yellow-300'}`}
+                                        onClick={() => handleCoffeeTypeSelect('beans')}
+                                    >
+                                        <div className="flex flex-col items-center">
+                                            <div className="h-24 w-24 mb-4">
+                                                <Image
+                                                    src="/images/D.webp"
+                                                    alt="Coffee Beans"
+                                                    width={96}
+                                                    height={96}
+                                                    className="rounded-full"
+                                                />
+                                            </div>
+                                            <h3 className="text-xl font-bold mb-2">Whole Beans</h3>
+                                            <p className="text-gray-600 text-center">For those who prefer to grind fresh</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
+                {showRoastSelection && (
+                    <section id="roast-selection" className="py-16 bg-gray-100">
+                        <div className="container mx-auto px-6">
+                            <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+                                <h2 className="text-3xl font-bold mb-6 text-center">Select Your Roast Preference</h2>
+                                <h3 className="text-xl mb-6 text-center">
+                                    Selected: <span className="font-semibold text-blue-600">{selectedCoffeeType === 'ground' ? 'Ground Coffee' : 'Whole Beans'}</span>
+                                </h3>
+
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                                    <div
+                                        className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedRoast === 'light' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-200 hover:border-yellow-300'}`}
+                                        onClick={() => handleRoastSelect('light')}
+                                    >
+                                        <div className="flex flex-col items-center">
+                                            <div className="h-16 w-16 mb-4 bg-amber-200 rounded-full"></div>
+                                            <h3 className="text-xl font-bold mb-2">Light Roast</h3>
+                                            <p className="text-gray-600 text-center">Bright, acidic, and fruity flavors</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedRoast === 'medium' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-200 hover:border-yellow-300'}`}
+                                        onClick={() => handleRoastSelect('medium')}
+                                    >
+                                        <div className="flex flex-col items-center">
+                                            <div className="h-16 w-16 mb-4 bg-amber-500 rounded-full"></div>
+                                            <h3 className="text-xl font-bold mb-2">Medium Roast</h3>
+                                            <p className="text-gray-600 text-center">Balanced flavor with some sweetness</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedRoast === 'dark' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-200 hover:border-yellow-300'}`}
+                                        onClick={() => handleRoastSelect('dark')}
+                                    >
+                                        <div className="flex flex-col items-center">
+                                            <div className="h-16 w-16 mb-4 bg-amber-800 rounded-full"></div>
+                                            <h3 className="text-xl font-bold mb-2">Dark Roast</h3>
+                                            <p className="text-gray-600 text-center">Bold, rich, and slightly bitter</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
                 {showPaymentForm && (
                     <section id="payment-form" className="py-16 bg-gray-100">
                         <div className="container mx-auto px-6">
                             <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
                                 <h2 className="text-3xl font-bold mb-6 text-center">Payment Details</h2>
                                 <h3 className="text-xl mb-6 text-center">
-                                    Selected Plan: <span className="font-semibold text-blue-600">{selectedPlan && plans[selectedPlan][0].name}</span> - {selectedPlan && plans[selectedPlan][0].price}
+                                    Selected: <span className="font-semibold text-blue-600">
+                                        {selectedPlan && plans[selectedPlan][0].name} - {selectedCoffeeType === 'ground' ? 'Ground' : 'Whole Beans'} ({selectedRoast})
+                                    </span>
                                 </h3>
 
                                 <form onSubmit={handleSubmit} className="space-y-6">
-                                    {/* <div>
-                                        <label htmlFor="paymentMethod" className="block text-gray-700 font-medium mb-2">Payment Method</label>
-                                        <select
-                                            id="paymentMethod"
-                                            name="paymentMethod"
-                                            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            value={formData.paymentMethod}
-                                            onChange={handleInputChange}
-                                            required
-                                        >
-                                            <option value="card">Credit/Debit Card</option>
-                                            <option value="blik">BLIK</option>
-                                            <option value="apple_pay">Apple Pay</option>
-                                        </select>
-                                    </div> */}
+                                    <input type="hidden" name="coffeeType" value={selectedCoffeeType || ''} />
+                                    <input type="hidden" name="roastPreference" value={selectedRoast || ''} />
 
-
-                                    <h3 className="text-2xl font-bold mt-8 mb-4">Delivery</h3>
+                                    <h3 className="text-2xl font-bold mt-8 mb-4">Delivery Information</h3>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
@@ -432,11 +570,70 @@ const PaymentForm = () => {
                                         <label htmlFor="receiveOffers" className="ml-2 block text-gray-700">Text me with news and offers</label>
                                     </div>
 
+                                    <h3 className="text-2xl font-bold mt-8 mb-4">Payment Method</h3>
+
+                                    <div className="space-y-4">
+                                        <div className="flex items-center">
+                                            <input
+                                                type="radio"
+                                                id="card"
+                                                name="paymentMethod"
+                                                value="card"
+                                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                                                checked={formData.paymentMethod === 'card'}
+                                                onChange={handleInputChange}
+                                            />
+                                            <label htmlFor="card" className="ml-2 block text-gray-700">Credit/Debit Card</label>
+                                        </div>
+                                        {formData.paymentMethod === 'card' && (
+                                            <div className="p-4 border border-gray-200 rounded">
+                                                <CardElement options={{
+                                                    style: {
+                                                        base: {
+                                                            fontSize: '16px',
+                                                            color: '#424770',
+                                                            '::placeholder': {
+                                                                color: '#aab7c4',
+                                                            },
+                                                        },
+                                                        invalid: {
+                                                            color: '#9e2146',
+                                                        },
+                                                    },
+                                                }} />
+                                            </div>
+                                        )}
+                                        <div className="flex items-center">
+                                            <input
+                                                type="radio"
+                                                id="blik"
+                                                name="paymentMethod"
+                                                value="blik"
+                                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                                                checked={formData.paymentMethod === 'blik'}
+                                                onChange={handleInputChange}
+                                            />
+                                            <label htmlFor="blik" className="ml-2 block text-gray-700">BLIK</label>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <input
+                                                type="radio"
+                                                id="apple_pay"
+                                                name="paymentMethod"
+                                                value="apple_pay"
+                                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                                                checked={formData.paymentMethod === 'apple_pay'}
+                                                onChange={handleInputChange}
+                                            />
+                                            <label htmlFor="apple_pay" className="ml-2 block text-gray-700">Apple Pay</label>
+                                        </div>
+                                    </div>
+
                                     <div className="mt-8">
                                         <button
                                             type="submit"
                                             className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded shadow transition-colors"
-                                            disabled={isPaymentLoading}
+                                            disabled={isPaymentLoading || !selectedCoffeeType || !selectedRoast}
                                         >
                                             {isPaymentLoading ? (
                                                 <span className="flex items-center justify-center">
