@@ -2,9 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useSingleCoffeeQuery } from "../../../../lib/redux/slices/CoffeeSlice";
-import { useCreatePaymentMutation } from "../../../../lib/redux/slices/PaymentSlice";
 import * as React from "react";
 import ShippingForm from "@/components/ShippingForm";
 import { useSession } from "next-auth/react";
@@ -23,10 +21,9 @@ const CoffeePage: React.FC<CoffeePageProps> = ({ params: paramsPromise }) => {
 
   const { data: coffee, isLoading, isError } = useSingleCoffeeQuery(id);
   const [quantity, setQuantity] = useState(1);
-  const router = useRouter();
 
   // Payment mutation
-  const [createPayment, { isLoading: isPaymentLoading }] = useCreatePaymentMutation();
+  // const [createPayment, { isLoading: isPaymentLoading }] = useCreatePaymentMutation();
 
 
   if (isLoading) {
@@ -59,46 +56,46 @@ const CoffeePage: React.FC<CoffeePageProps> = ({ params: paramsPromise }) => {
     setQuantity(Math.max(1, value));
   };
 
-  const handlePayNow = async () => {
-    try {
-      // Calculate total amount
-      const totalAmount = coffee.price * quantity;
+  // const handlePayNow = async () => {
+  //   try {
+  //     // Calculate total amount
+  //     const totalAmount = coffee.price * quantity;
 
-      // Prepare payment data according to PaymentDTO
-      const paymentData = {
-        email: "user@example.com", // Replace with actual user email
-        cardNumber: "4242424242424242", // Replace with actual card number
-        expiryDate: "12/25", // Replace with actual expiry date
-        cvv: "123", // Replace with actual CVV
-        firstName: "John", // Replace with actual first name
-        lastName: "Doe", // Replace with actual last name
-        address: "123 Main St", // Replace with actual address
-        apartment: "Apt 4B", // Replace with actual apartment (optional)
-        city: "New York", // Replace with actual city
-        zipCode: "10001", // Replace with actual ZIP code
-        phone: "123-456-7890", // Replace with actual phone number
-        textOffers: false, // Replace with actual user preference
-        planName: coffee.title,
-        planPrice: totalAmount,
-        userId: "user_123", // Replace with actual user ID
-        subscriptionId: "sub_123", // Replace with actual subscription ID (if applicable)
-        paymentMethodId: "pm_123456789", // Replace with actual payment method ID
-      };
+  //     // Prepare payment data according to PaymentDTO
+  //     const paymentData = {
+  //       email: "user@example.com", // Replace with actual user email
+  //       cardNumber: "4242424242424242", // Replace with actual card number
+  //       expiryDate: "12/25", // Replace with actual expiry date
+  //       cvv: "123", // Replace with actual CVV
+  //       firstName: "John", // Replace with actual first name
+  //       lastName: "Doe", // Replace with actual last name
+  //       address: "123 Main St", // Replace with actual address
+  //       apartment: "Apt 4B", // Replace with actual apartment (optional)
+  //       city: "New York", // Replace with actual city
+  //       zipCode: "10001", // Replace with actual ZIP code
+  //       phone: "123-456-7890", // Replace with actual phone number
+  //       textOffers: false, // Replace with actual user preference
+  //       planName: coffee.title,
+  //       planPrice: totalAmount,
+  //       userId: "user_123", // Replace with actual user ID
+  //       subscriptionId: "sub_123", // Replace with actual subscription ID (if applicable)
+  //       paymentMethodId: "pm_123456789", // Replace with actual payment method ID
+  //     };
 
-      // Call the payment mutation
-      const result = await createPayment(paymentData).unwrap();
+  //     // Call the payment mutation
+  //     const result = await createPayment(paymentData).unwrap();
 
-      if (result.success) {
-        alert("Payment successful! Thank you for your purchase.");
-        router.push("/dashboard"); // Redirect to dashboard or confirmation page
-      } else {
-        alert("Payment failed. Please try again.");
-      }
-    } catch (error) {
-      console.error("Payment error:", error);
-      alert("An error occurred during payment. Please try again.");
-    }
-  };
+  //     if (result.success) {
+  //       alert("Payment successful! Thank you for your purchase.");
+  //       router.push("/dashboard"); // Redirect to dashboard or confirmation page
+  //     } else {
+  //       alert("Payment failed. Please try again.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Payment error:", error);
+  //     alert("An error occurred during payment. Please try again.");
+  //   }
+  // };
 
   const handleVerify = ()=>{
     if(session?.user){
@@ -250,10 +247,10 @@ const CoffeePage: React.FC<CoffeePageProps> = ({ params: paramsPromise }) => {
 
                   <button
                     onClick={handleVerify}
-                    disabled={isPaymentLoading}
+                    // disabled={isPaymentLoading}
                     className="flex-1 bg-black text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors disabled:bg-gray-400"
                   >
-                    {isPaymentLoading ? "Processing..." : "Pay Now"}
+                   Pay Now
                   </button>
                 </div>
 

@@ -30,9 +30,8 @@ const SubscriptionPage = () => {
 
 const PaymentForm = () => {
     const router = useRouter();
-    const { data: session, status } = useSession();
+    const {status } = useSession();
     const isLoggedIn = status === 'authenticated';
-    const user = session?.user;
 
     const [selectedPlan, setSelectedPlan] = useState<PlanType | null>(null);
     const [showPaymentForm, setShowPaymentForm] = useState(false);

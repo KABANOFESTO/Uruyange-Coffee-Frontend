@@ -6,13 +6,29 @@ import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 
 interface ShippingType {
-    isPay: boolean;
+    isPay?: boolean;
     setIsPay: (value: boolean) => void;
-    coffee: any;
+    coffee: {
+        title: string,
+        price: number
+    };
     quantity: number;
 }
 
-const ShippingForm = ({ isPay, setIsPay, quantity, coffee }: ShippingType) => {
+interface PaymentValues {
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    address: string;
+    apartment?: string;
+    city: string;
+    zipCode: string;
+    phone?: string;
+    textOffers: boolean;
+    paymentMethod: string;
+}
+
+const ShippingForm = ({setIsPay, quantity, coffee }: ShippingType) => {
     const [createPayment, { isLoading: isPaymentLoading }] = useCreatePaymentMutation();
     const { data: session } = useSession()
 
@@ -35,7 +51,7 @@ const ShippingForm = ({ isPay, setIsPay, quantity, coffee }: ShippingType) => {
         }
     };
 
-    const handleSubmitFunc = async (values: any) => {
+    const handleSubmitFunc = async (values: PaymentValues) => {
         if (!session) {
             toast.error("You must be logged in to make a payment.");
             return;
@@ -165,7 +181,7 @@ const ShippingForm = ({ isPay, setIsPay, quantity, coffee }: ShippingType) => {
                                 type="submit"
                                 className="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
                             >
-                                Save Address
+                            {isPaymentLoading ? "Loading..." : "Continue"}
                             </button>
                         </Form>
                     )}
