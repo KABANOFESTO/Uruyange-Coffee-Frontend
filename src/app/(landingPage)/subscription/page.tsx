@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { useSubscriptionsQuery, useSingleSubscriptionQuery } from '../../../lib/redux/slices/subscribersSlice';
-import { useCreatePaymentMutation } from '../../../lib/redux/slices/PaymentSlice';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { useBuySubscriptionMutation, useCreatePaymentMutation } from '../../../lib/redux/slices/PaymentSlice';
+import { Elements, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import b from "../../../../public/images/Americano.jpg";
+import { toast } from 'sonner';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -16,14 +17,25 @@ type PlanType = 'weekly' | 'monthly' | 'yearly';
 type CoffeeType = 'ground' | 'beans';
 type RoastPreference = 'light' | 'medium' | 'dark';
 
-interface PlanDetails {
+// interface PlanDetails {
+//     name: string;
+//     price: string;
+//     imageSrc: string;
+// }
+
+interface Subscription {
+    id: string;
+    type?: string;
     name: string;
-    price: string;
-    imageSrc: string;
+    price: number;
+    billingCycle?: string;
+    imageSrc?: string;
 }
 
+
+
 interface PaymentData {
-    subscriptionType: PlanType;
+    subscriptionType: Subscription;
     email: string;
     firstName: string;
     lastName: string;
@@ -37,6 +49,10 @@ interface PaymentData {
     paymentMethodId: string;
     coffeeType: CoffeeType;
     roastPreference: RoastPreference;
+    subscriptionId: string;
+    type: string;
+    userId: string;
+    price: number
 }
 
 const SubscriptionPage = () => {
@@ -52,13 +68,14 @@ const PaymentForm = () => {
     const { data: session, status } = useSession();
     const isLoggedIn = status === 'authenticated';
 
-    const [selectedPlan, setSelectedPlan] = useState<PlanType | null>(null);
+    const [selectedPlan, setSelectedPlan] = useState<Subscription | null>(null);
     const [selectedCoffeeType, setSelectedCoffeeType] = useState<CoffeeType | null>(null);
     const [selectedRoast, setSelectedRoast] = useState<RoastPreference | null>(null);
     const [showCoffeeTypeSelection, setShowCoffeeTypeSelection] = useState(false);
     const [showRoastSelection, setShowRoastSelection] = useState(false);
     const [showPaymentForm, setShowPaymentForm] = useState(false);
     const [showLoginMessage, setShowLoginMessage] = useState(false);
+
 
     const { data: subscriptions, isLoading: isLoadingSubscriptions } = useSubscriptionsQuery<SubscriptionsQueryResult>({});
 
@@ -67,7 +84,7 @@ const PaymentForm = () => {
         { skip: !selectedPlan }
     );
 
-    const [createPayment, { isLoading: isPaymentLoading, isSuccess: isPaymentSuccess }] = useCreatePaymentMutation();
+    const [createPayment, { isLoading: isPaymentLoading, isSuccess: isPaymentSuccess }] = useBuySubscriptionMutation();
 
     const [formData, setFormData] = useState({
         email: session?.user?.email || '',
@@ -90,66 +107,54 @@ const PaymentForm = () => {
     const stripe = useStripe();
     const elements = useElements();
 
-    const fallbackPlans: Record<PlanType, PlanDetails> = {
-        weekly: {
-            name: 'Weekly Plan',
-            price: '$18.99/week',
+    const fallbackPlans = [
+        {
+            id: '1',
+            name: 'weekly',
+            price: 18.99,
             imageSrc: '/images/E.webp'
         },
-        monthly: {
-            name: 'Monthly Plan',
-            price: '$49.99/month',
+        {
+            id: '2',
+            name: 'monthly',
+            price: 49.99,
             imageSrc: '/images/D.webp'
         },
-        yearly: {
-            name: 'Yearly Plan',
-            price: '$199.99/year',
+        {
+            id: '3',
+            name: 'yearly',
+            price: 199.99,
             imageSrc: '/images/C.webp'
         }
-    };
-
-    interface Subscription {
-        type: string;
-        name: string;
-        price: number;
-        billingCycle: string;
-        imageSrc: string;
-    }
+    ];
 
     interface SubscriptionsQueryResult {
         data: Subscription[];
         isLoading: boolean;
     }
 
-    const plans: Record<PlanType, PlanDetails[]> = subscriptions?.length
-        ? subscriptions.reduce<Record<PlanType, PlanDetails[]>>((acc: Record<PlanType, PlanDetails[]>, plan: Subscription) => {
-            const planType = plan.type as PlanType;
-            return {
-                ...acc,
-                [planType]: [
-                    ...(acc[planType] || []),
-                    {
-                        name: plan.name,
-                        price: `$${plan.price}/${plan.name}`,
-                        imageSrc: plan.imageSrc
-                    }
-                ]
-            };
-        }, {} as Record<PlanType, PlanDetails[]>)
-        : {
-            weekly: [fallbackPlans.weekly],
-            monthly: [fallbackPlans.monthly],
-            yearly: [fallbackPlans.yearly]
-        };
+    const plans = subscriptions?.length ? subscriptions : fallbackPlans;
 
-    useEffect(() => {
-        if (isPaymentSuccess) {
-            alert('Payment successful! Thank you for subscribing.');
-            router.push('/dashboard');
+    const getPlanDisplayName = (name: string) => {
+        switch (name) {
+            case 'weekly': return 'Weekly Plan';
+            case 'monthly': return 'Monthly Plan';
+            case 'yearly': return 'Yearly Plan';
+            default: return name;
         }
-    }, [isPaymentSuccess, router]);
+    };
 
-    const handlePlanSelect = (plan: PlanType) => {
+    const getPlanPriceDisplay = (name: string, price: number) => {
+        switch (name) {
+            case 'weekly': return `$${price.toFixed(2)}/week`;
+            case 'monthly': return `$${price.toFixed(2)}/month`;
+            case 'yearly': return `$${price.toFixed(2)}/year`;
+            default: return `$${price}`;
+        }
+    };
+
+
+    const handlePlanSelect = (plan: any) => {
         setSelectedPlan(plan);
 
         if (!isLoggedIn) {
@@ -218,47 +223,26 @@ const PaymentForm = () => {
                 paymentMethod: formData.paymentMethod,
                 paymentMethodId: '',
                 coffeeType: selectedCoffeeType,
-                roastPreference: selectedRoast
+                roastPreference: selectedRoast,
+                subscriptionId: selectedPlan.id,
+                type: selectedCoffeeType,
+                userId: session?.user?.id || "",
+                price: selectedPlan.price
+
             };
-
-            if (formData.paymentMethod === 'card') {
-                const { paymentMethod, error } = await stripe.createPaymentMethod({
-                    type: 'card',
-                    card: elements.getElement(CardElement)!,
-                    billing_details: {
-                        name: `${formData.firstName} ${formData.lastName}`,
-                        email: formData.email,
-                        phone: formData.phone,
-                        address: {
-                            line1: formData.address,
-                            line2: formData.apartment,
-                            city: formData.city,
-                            postal_code: formData.zipCode,
-                        },
-                    },
-                });
-
-                if (error) {
-                    throw error;
-                }
-
-                paymentData.paymentMethodId = paymentMethod.id;
-            } else if (formData.paymentMethod === 'blik') {
-                paymentData.paymentMethodId = 'blik';
-            } else if (formData.paymentMethod === 'apple_pay') {
-                paymentData.paymentMethodId = 'apple_pay';
+            const response = await createPayment(paymentData).unwrap();
+            if (response) {
+                window.location.href = response.sessionUrl
             }
-
-            await createPayment(paymentData).unwrap();
         } catch (error) {
             console.error('Payment failed:', error);
-            alert('Payment processing failed. Please try again.');
+            toast.error('Payment processing failed. Please try again.');
         }
     };
 
     const handleLoginRedirect = () => {
         if (selectedPlan) {
-            sessionStorage.setItem('selectedSubscriptionPlan', selectedPlan);
+            sessionStorage.setItem('selectedSubscriptionPlan', selectedPlan.name);
         }
         router.push('/auth');
     };
@@ -285,28 +269,28 @@ const PaymentForm = () => {
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                {Object.entries(plans).map(([key, planArray]) => (
-                                    planArray.map((plan, index) => (
-                                        <div key={`${key}-${index}`} className="p-8 bg-white shadow-lg rounded transition-all hover:shadow-xl">
-                                            <div className="relative h-48 w-full mb-4">
-                                                <Image
-                                                    src={plan.imageSrc || b}
-                                                    alt={plan.name}
-                                                    fill
-                                                    style={{ objectFit: 'cover' }}
-                                                    className="rounded"
-                                                />
-                                            </div>
-                                            <h3 className="text-2xl font-bold mb-4">{plan.name}</h3>
-                                            <p className="text-lg text-gray-600 mb-6">{plan.price}</p>
-                                            <button
-                                                onClick={() => handlePlanSelect(key as PlanType)}
-                                                className={`bg-yellow-500 text-white py-2 px-6 rounded shadow hover:bg-yellow-600 transition-colors ${selectedPlan === key ? 'ring-2 ring-yellow-400' : ''}`}
-                                            >
-                                                Subscribe
-                                            </button>
+                                {plans.map((plan: any) => (
+                                    <div key={plan.id} className="p-8 bg-white shadow-lg rounded transition-all hover:shadow-xl">
+                                        <div className="relative h-48 w-full mb-4">
+
+                                            <Image
+                                                src={plan.imageSrc || b}
+                                                alt={getPlanDisplayName(plan.name)}
+                                                fill
+                                                style={{ objectFit: 'cover' }}
+                                                className="rounded"
+                                            />
                                         </div>
-                                    ))
+                                        <h3 className="text-2xl font-bold mb-4">{getPlanDisplayName(plan.name)}</h3>
+                                        <p className="text-lg text-gray-600 mb-6">{getPlanPriceDisplay(plan.name, plan.price)}</p>
+                                        <button
+                                            onClick={() => handlePlanSelect(plan)}
+                                            className={`bg-yellow-500 text-white py-2 px-6 rounded shadow hover:bg-yellow-600 transition-colors ${selectedPlan === plan.name ? 'ring-2 ring-yellow-400' : ''
+                                                }`}
+                                        >
+                                            Subscribe
+                                        </button>
+                                    </div>
                                 ))}
                             </div>
                         )}
@@ -324,7 +308,7 @@ const PaymentForm = () => {
                                 </div>
                                 <h2 className="text-3xl font-bold mb-4">Please Log In Before You Pay</h2>
                                 <p className="text-gray-600 mb-6">
-                                    To complete your subscription to our {selectedPlan && plans[selectedPlan][0].name},
+                                    To complete your subscription to our Here
                                     please log in to your account or create a new one.
                                 </p>
                                 <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 justify-center">
@@ -352,7 +336,7 @@ const PaymentForm = () => {
                             <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
                                 <h2 className="text-3xl font-bold mb-6 text-center">Select Your Coffee Type</h2>
                                 <h3 className="text-xl mb-6 text-center">
-                                    Selected Plan: <span className="font-semibold text-blue-600">{selectedPlan && plans[selectedPlan][0].name}</span> - {selectedPlan && plans[selectedPlan][0].price}
+                                    Selected Plan: <span className="font-semibold text-blue-600">{selectedPlan && selectedPlan?.name}</span> - {selectedPlan && selectedPlan?.price}
                                 </h3>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
@@ -451,7 +435,7 @@ const PaymentForm = () => {
                                 <h2 className="text-3xl font-bold mb-6 text-center">Payment Details</h2>
                                 <h3 className="text-xl mb-6 text-center">
                                     Selected: <span className="font-semibold text-blue-600">
-                                        {selectedPlan && plans[selectedPlan][0].name} - {selectedCoffeeType === 'ground' ? 'Ground' : 'Whole Beans'} ({selectedRoast})
+                                        {selectedPlan && selectedPlan?.name} - {selectedCoffeeType === 'ground' ? 'Ground' : 'Whole Beans'} ({selectedRoast})
                                     </span>
                                 </h3>
 
@@ -570,9 +554,9 @@ const PaymentForm = () => {
                                         <label htmlFor="receiveOffers" className="ml-2 block text-gray-700">Text me with news and offers</label>
                                     </div>
 
-                                    <h3 className="text-2xl font-bold mt-8 mb-4">Payment Method</h3>
+                                    {/* <h3 className="text-2xl font-bold mt-8 mb-4">Payment Method</h3> */}
 
-                                    <div className="space-y-4">
+                                    {/* <div className="space-y-4">
                                         <div className="flex items-center">
                                             <input
                                                 type="radio"
@@ -627,7 +611,7 @@ const PaymentForm = () => {
                                             />
                                             <label htmlFor="apple_pay" className="ml-2 block text-gray-700">Apple Pay</label>
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     <div className="mt-8">
                                         <button
