@@ -1,5 +1,5 @@
 "use client"
-import { Home, Coffee, Users, HelpCircle, LogOut, Menu, X } from "lucide-react";
+import { Home, Coffee, Users, HelpCircle, LogOut, Menu, X, DollarSign } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,7 +21,7 @@ const items = [
     {
         title: "Subscribtions",
         url: "/admin/subscribers",
-        icon: Users,
+        icon: DollarSign,
     },
     {
         title: "Payments",

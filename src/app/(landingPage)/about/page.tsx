@@ -195,7 +195,7 @@ const About = () => {
             <div className="text-center">
               <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden">
                 <Image
-                  src="/images/profile.JPG"
+                  src="/images/profile.jpg"
                   alt="Team Member"
                   fill
                   style={{ objectFit: 'cover' }}
@@ -211,7 +211,7 @@ const About = () => {
             <div className="text-center">
               <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden">
                 <Image
-                  src="/images/martin.JPG"
+                  src="/images/martin.jpg"
                   alt="Team Member"
                   fill
                   style={{ objectFit: 'cover' }}
@@ -227,7 +227,7 @@ const About = () => {
             <div className="text-center">
               <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden">
                 <Image
-                  src="/images/me1.JPG"
+                  src="/images/me1.jpg"
                   alt="Team Member"
                   fill
                   style={{ objectFit: 'cover' }}

@@ -32,7 +32,7 @@ const subscriptionApi = apiSlice.injectEndpoints({
         // Update a subscription by ID
         updateSubscription: builder.mutation({
             query: ({ id, data }) => ({
-                url: `/subscriptions/${id}`, // Relative to baseUrl
+                url: `/subscriptions/${id}`, 
                 method: "PUT",
                 body: data,
             }),
@@ -40,7 +40,6 @@ const subscriptionApi = apiSlice.injectEndpoints({
     }),
 });
 
-// Export hooks for usage in components
 export const {
     useSubscriptionsQuery,
     useSingleSubscriptionQuery,

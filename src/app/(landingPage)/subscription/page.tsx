@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { useSubscriptionsQuery, useSingleSubscriptionQuery } from '../../../lib/redux/slices/subscribersSlice';
-import { useBuySubscriptionMutation, useCreatePaymentMutation } from '../../../lib/redux/slices/PaymentSlice';
+import { useBuySubscriptionMutation } from '../../../lib/redux/slices/PaymentSlice';
 import { Elements, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import b from "../../../../public/images/Americano.jpg";
@@ -13,7 +13,6 @@ import { toast } from 'sonner';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-type PlanType = 'weekly' | 'monthly' | 'yearly';
 type CoffeeType = 'ground' | 'beans';
 type RoastPreference = 'light' | 'medium' | 'dark';
 
@@ -84,7 +83,7 @@ const PaymentForm = () => {
         { skip: !selectedPlan }
     );
 
-    const [createPayment, { isLoading: isPaymentLoading, isSuccess: isPaymentSuccess }] = useBuySubscriptionMutation();
+    const [createPayment, { isLoading: isPaymentLoading, }] = useBuySubscriptionMutation();
 
     const [formData, setFormData] = useState({
         email: session?.user?.email || '',
@@ -154,7 +153,7 @@ const PaymentForm = () => {
     };
 
 
-    const handlePlanSelect = (plan: any) => {
+    const handlePlanSelect = (plan: Subscription) => {
         setSelectedPlan(plan);
 
         if (!isLoggedIn) {
@@ -269,7 +268,7 @@ const PaymentForm = () => {
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                {plans.map((plan: any) => (
+                                {plans.map((plan) => (
                                     <div key={plan.id} className="p-8 bg-white shadow-lg rounded transition-all hover:shadow-xl">
                                         <div className="relative h-48 w-full mb-4">
 
@@ -285,7 +284,7 @@ const PaymentForm = () => {
                                         <p className="text-lg text-gray-600 mb-6">{getPlanPriceDisplay(plan.name, plan.price)}</p>
                                         <button
                                             onClick={() => handlePlanSelect(plan)}
-                                            className={`bg-yellow-500 text-white py-2 px-6 rounded shadow hover:bg-yellow-600 transition-colors ${selectedPlan === plan.name ? 'ring-2 ring-yellow-400' : ''
+                                            className={`bg-yellow-500 text-white py-2 px-6 rounded shadow hover:bg-yellow-600 transition-colors ${selectedPlan?.name === plan.name ? 'ring-2 ring-yellow-400' : ''
                                                 }`}
                                         >
                                             Subscribe
