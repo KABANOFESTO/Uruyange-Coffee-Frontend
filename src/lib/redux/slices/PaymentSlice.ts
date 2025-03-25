@@ -19,10 +19,18 @@ const paymentApi = apiSlice.injectEndpoints({
                 body: data
             }),
         }),
+        buySubscription: builder.mutation({
+            query: (data) => ({
+                url: "/buySubscription",
+                method: "POST",
+                body: data
+            }),
+        }),
     }),
 });
 
 export const {
     usePaymentsQuery,
-    useCreatePaymentMutation
+    useCreatePaymentMutation,
+    useBuySubscriptionMutation
 } = paymentApi;
