@@ -29,7 +29,7 @@ const OurCoffee: React.FC = () => {
             Explore single-origin coffees from the best growers worldwide. Delivered fresh to your door.
           </p>
           <button
-            onClick={() => router.push("/plan")}
+            onClick={() => router.push("/coffees")}
             className="bg-yellow-500 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-yellow-600 transition"
           >
             Start Your Journey
