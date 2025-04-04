@@ -28,7 +28,7 @@ const AdminPaymentsDashboard = () => {
 
     // Extract data based on active tab
     const payments = paymentsData?.data?.payments || [];
-    const subscriptions = subscriptionsData || []; // Directly use the array response
+    const subscriptions = subscriptionsData || []; 
     const totalPages = activeTab === 'payments'
         ? paymentsData?.data?.totalPages || 1
         : subscriptionsData?.data?.totalPages || 1;
@@ -324,7 +324,7 @@ const AdminPaymentsDashboard = () => {
                                                     {subscription.email?.charAt(0) || subscription.userId?.charAt(0) || 'S'}
                                                 </div>
                                                 <div className="text-sm font-medium text-gray-800">
-                                                    {subscription.email || 'No email'}
+                                                    {subscription.email || subscription.userId || 'No email/user'}
                                                 </div>
                                             </div>
                                         </td>
