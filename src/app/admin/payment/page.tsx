@@ -58,6 +58,7 @@ const AdminPaymentsDashboard = () => {
         zipCode: string;
         phone: string | null;
         userId: string;
+        email: string | null;
         subscriptionId: string;
         subscription: {
             id: string;
@@ -65,9 +66,6 @@ const AdminPaymentsDashboard = () => {
             price: number;
             createdAt: string;
             userId: string | null;
-        };
-        user?: {
-            email: string;
         };
     }
 
@@ -323,10 +321,10 @@ const AdminPaymentsDashboard = () => {
                                         <td className="py-3 px-4 text-sm text-gray-800">
                                             <div className="flex items-center gap-2">
                                                 <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-800 font-medium">
-                                                    {subscription.user?.email?.charAt(0) || subscription.userId?.charAt(0) || 'S'}
+                                                    {subscription.email?.charAt(0) || subscription.userId?.charAt(0) || 'S'}
                                                 </div>
                                                 <div className="text-sm font-medium text-gray-800">
-                                                    {subscription.user?.email || 'No email'}
+                                                    {subscription.email || 'No email'}
                                                 </div>
                                             </div>
                                         </td>

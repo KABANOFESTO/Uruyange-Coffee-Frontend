@@ -471,6 +471,19 @@ const PaymentForm = () => {
                                             />
                                         </div>
                                     </div>
+                                    <div>
+                                        <label htmlFor="email" className="block text-gray-700 font-medium mb-2">Email</label>
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            placeholder="Enter your email"
+                                            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            required
+                                            onChange={handleInputChange}
+                                            value={formData.email || ''}
+                                        />
+                                    </div>
 
                                     <div>
                                         <label htmlFor="address" className="block text-gray-700 font-medium mb-2">Address</label>

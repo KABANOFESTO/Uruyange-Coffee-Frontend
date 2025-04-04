@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
@@ -7,9 +7,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import axios from "axios";
 import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react";
 
 const SignUp = () => {
     const router = useRouter();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const signupFormik = useFormik({
         initialValues: {
@@ -42,16 +45,13 @@ const SignUp = () => {
                     toast.error(response.data.message || "Signup failed");
                 }
             } catch (error: unknown) {
-                if (
-                    error &&
-                    typeof error === 'object' &&
-                    'response' in error &&
-                    (error as { response?: { data?: { message?: string } } }).response
-                ) {
-                    const err = error as { response?: { data?: { message?: string } } };
-                    toast.error(err.response?.data?.message || "Failed to create account");
+                if (error instanceof Error) {
+                    // Check if error has a response property (common in Axios errors)
+                    const axiosError = error as { response?: { data?: { message?: string } } };
+                    const errorMessage = axiosError.response?.data?.message || error.message || "Failed to create account";
+                    toast.error(errorMessage);
                 } else {
-                    toast.error("Failed to create account");
+                    toast.error("An unexpected error occurred");
                 }
             }
 
@@ -91,39 +91,46 @@ const SignUp = () => {
                             onBlur={signupFormik.handleBlur}
                             value={signupFormik.values.email}
                         />
-                        {signupFormik.touched.email && signupFormik.errors.email && (
-                            <p className="text-red-500 text-xs mt-1">{signupFormik.errors.email}</p>
-                        )}
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Enter your password"
-                            className="w-full border border-gray-300 text-sm rounded-lg p-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
-                            onChange={signupFormik.handleChange}
-                            onBlur={signupFormik.handleBlur}
-                            value={signupFormik.values.password}
-                        />
-                        {signupFormik.touched.password && signupFormik.errors.password && (
-                            <p className="text-red-500 text-xs mt-1">{signupFormik.errors.password}</p>
-                        )}
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                placeholder="Enter your password"
+                                className="w-full border border-gray-300 text-sm rounded-lg p-2 pr-10 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+                                onChange={signupFormik.handleChange}
+                                onBlur={signupFormik.handleBlur}
+                                value={signupFormik.values.password}
+                            />
+                            <span
+                                className="absolute inset-y-0 right-2 flex items-center cursor-pointer"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                            </span>
+                        </div>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            placeholder="Confirm your password"
-                            className="w-full border border-gray-300 text-sm rounded-lg p-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
-                            onChange={signupFormik.handleChange}
-                            onBlur={signupFormik.handleBlur}
-                            value={signupFormik.values.confirmPassword}
-                        />
-                        {signupFormik.touched.confirmPassword && signupFormik.errors.confirmPassword && (
-                            <p className="text-red-500 text-xs mt-1">{signupFormik.errors.confirmPassword}</p>
-                        )}
+                        <div className="relative">
+                            <input
+                                type={showConfirmPassword ? "text" : "password"}
+                                name="confirmPassword"
+                                placeholder="Confirm your password"
+                                className="w-full border border-gray-300 text-sm rounded-lg p-2 pr-10 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+                                onChange={signupFormik.handleChange}
+                                onBlur={signupFormik.handleBlur}
+                                value={signupFormik.values.confirmPassword}
+                            />
+                            <span
+                                className="absolute inset-y-0 right-2 flex items-center cursor-pointer"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            >
+                                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                            </span>
+                        </div>
                     </div>
                     <button
                         type="submit"
@@ -135,7 +142,7 @@ const SignUp = () => {
                 </form>
                 <div className="text-center">
                     <span className="text-sm text-gray-600">
-                        Already have an account?{" "}
+                        Already have an account? {" "}
                         <Link href="/auth" className="text-black font-medium hover:underline">
                             Sign in
                         </Link>

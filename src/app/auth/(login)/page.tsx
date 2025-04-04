@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
@@ -7,6 +7,7 @@ import { getSession, signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react";
 
 const SignIn = () => {
     useRouter();
@@ -15,6 +16,12 @@ const SignIn = () => {
     useEffect(() => {
         getSession();
     }, []);
+
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword((prev) => !prev);
+    };
 
     const loginFormik = useFormik({
         initialValues: {
@@ -77,17 +84,24 @@ const SignIn = () => {
                             value={loginFormik.values.email}
                         />
                     </div>
-                    <div>
+                    <div className="relative">
                         <label className="block text-sm font-medium text-gray-700">Password</label>
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             name="password"
                             placeholder="Enter your password"
-                            className="w-full border border-gray-300 text-sm rounded-lg p-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+                            className="w-full border border-gray-300 text-sm rounded-lg p-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none pr-10"
                             onChange={loginFormik.handleChange}
                             onBlur={loginFormik.handleBlur}
                             value={loginFormik.values.password}
                         />
+                        <button
+                            type="button"
+                            onClick={togglePasswordVisibility}
+                            className="absolute right-3 top-7 text-gray-600 focus:outline-none"
+                        >
+                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
                     </div>
                     <button
                         type="submit"
