@@ -16,12 +16,6 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 type CoffeeType = 'ground' | 'beans';
 type RoastPreference = 'light' | 'medium' | 'dark';
 
-// interface PlanDetails {
-//     name: string;
-//     price: string;
-//     imageSrc: string;
-// }
-
 interface Subscription {
     id: string;
     type?: string;
@@ -565,65 +559,6 @@ const PaymentForm = () => {
                                         />
                                         <label htmlFor="receiveOffers" className="ml-2 block text-gray-700">Text me with news and offers</label>
                                     </div>
-
-                                    {/* <h3 className="text-2xl font-bold mt-8 mb-4">Payment Method</h3> */}
-
-                                    {/* <div className="space-y-4">
-                                        <div className="flex items-center">
-                                            <input
-                                                type="radio"
-                                                id="card"
-                                                name="paymentMethod"
-                                                value="card"
-                                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                                                checked={formData.paymentMethod === 'card'}
-                                                onChange={handleInputChange}
-                                            />
-                                            <label htmlFor="card" className="ml-2 block text-gray-700">Credit/Debit Card</label>
-                                        </div>
-                                        {formData.paymentMethod === 'card' && (
-                                            <div className="p-4 border border-gray-200 rounded">
-                                                <CardElement options={{
-                                                    style: {
-                                                        base: {
-                                                            fontSize: '16px',
-                                                            color: '#424770',
-                                                            '::placeholder': {
-                                                                color: '#aab7c4',
-                                                            },
-                                                        },
-                                                        invalid: {
-                                                            color: '#9e2146',
-                                                        },
-                                                    },
-                                                }} />
-                                            </div>
-                                        )}
-                                        <div className="flex items-center">
-                                            <input
-                                                type="radio"
-                                                id="blik"
-                                                name="paymentMethod"
-                                                value="blik"
-                                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                                                checked={formData.paymentMethod === 'blik'}
-                                                onChange={handleInputChange}
-                                            />
-                                            <label htmlFor="blik" className="ml-2 block text-gray-700">BLIK</label>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <input
-                                                type="radio"
-                                                id="apple_pay"
-                                                name="paymentMethod"
-                                                value="apple_pay"
-                                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                                                checked={formData.paymentMethod === 'apple_pay'}
-                                                onChange={handleInputChange}
-                                            />
-                                            <label htmlFor="apple_pay" className="ml-2 block text-gray-700">Apple Pay</label>
-                                        </div>
-                                    </div> */}
 
                                     <div className="mt-8">
                                         <button
