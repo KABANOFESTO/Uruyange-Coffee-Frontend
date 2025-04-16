@@ -85,24 +85,31 @@ const SignIn = () => {
                         />
                     </div>
                     <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700">Password</label>
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            name="password"
-                            placeholder="Enter your password"
-                            className="w-full border border-gray-300 text-sm rounded-lg p-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none pr-10"
-                            onChange={loginFormik.handleChange}
-                            onBlur={loginFormik.handleBlur}
-                            value={loginFormik.values.password}
-                        />
-                        <button
-                            type="button"
-                            onClick={togglePasswordVisibility}
-                            className="absolute right-3 top-7 text-gray-600 focus:outline-none"
-                        >
-                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                        </button>
-                    </div>
+  <label className="block text-sm font-medium text-gray-700">Password</label>
+  <input
+    type={showPassword ? "text" : "password"}
+    name="password"
+    placeholder="Enter your password"
+    className="w-full border border-gray-300 text-sm rounded-lg p-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none pr-10"
+    onChange={loginFormik.handleChange}
+    onBlur={loginFormik.handleBlur}
+    value={loginFormik.values.password}
+  />
+  <button
+    type="button"
+    onClick={togglePasswordVisibility}
+    className="absolute right-3 top-7 text-gray-600 focus:outline-none"
+  >
+    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+  </button>
+  {/* Forgot Password Link */}
+  <div className="mt-1 text-right">
+    <Link href="/auth/ForgetPassword" className="text-sm text-yellow-600 hover:underline">
+      Forgot Password?
+    </Link>
+  </div>
+</div>
+
                     <button
                         type="submit"
                         className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg p-2 transition-all duration-300"

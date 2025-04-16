@@ -12,10 +12,10 @@ export default function Footer() {
           <ul className="space-y-2">
             <li><Link href="/FAQ" className="hover:text-gray-300 transition-colors">FAQ</Link></li>
             <li><Link href="/contact" className="hover:text-gray-300 transition-colors">Contact Us</Link></li>
-            <li><Link href="/refund-policy" className="hover:text-gray-300 transition-colors">Refund Policy</Link></li>
-            <li><Link href="/privacy-policy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link></li>
-            <li><Link href="/terms" className="hover:text-gray-300 transition-colors">Terms of Service</Link></li>
-            <li><Link href="/wholesale" className="hover:text-gray-300 transition-colors">Wholesale</Link></li>
+            <li><Link href="/RefundPolicy" className="hover:text-gray-300 transition-colors">Refund Policy</Link></li>
+            <li><Link href="/PrivacyPolicy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link></li>
+            <li><Link href="/TermsOfService" className="hover:text-gray-300 transition-colors">Terms of Service</Link></li>
+            <li><Link href="/Wholesale" className="hover:text-gray-300 transition-colors">Wholesale</Link></li>
           </ul>
         </div>
 
@@ -24,11 +24,11 @@ export default function Footer() {
           <h4 className="font-bold text-lg mb-4">Learn</h4>
           <ul className="space-y-2">
             <li><Link href="/about" className="hover:text-gray-300 transition-colors">About Us</Link></li>
-            <li><Link href="/careers" className="hover:text-gray-300 transition-colors">Careers</Link></li>
+            <li><Link href="/Careers" className="hover:text-gray-300 transition-colors">Careers</Link></li>
             <li><Link href="/contact" className="hover:text-gray-300 transition-colors">Contact Us</Link></li>
-            <li><Link href="/blog" className="hover:text-gray-300 transition-colors">Blog</Link></li>
-            <li><Link href="/press" className="hover:text-gray-300 transition-colors">Press</Link></li>
-            <li><Link href="/give-get" className="hover:text-gray-300 transition-colors">Give $5, Get $5</Link></li>
+            <li><Link href="/Blog" className="hover:text-gray-300 transition-colors">Blog</Link></li>
+            <li><Link href="/Press" className="hover:text-gray-300 transition-colors">Press</Link></li>
+            <li><Link href="/Give5Get5" className="hover:text-gray-300 transition-colors">Give $5, Get $5</Link></li>
           </ul>
         </div>
 
@@ -36,13 +36,13 @@ export default function Footer() {
         <div className="flex-1 min-w-[200px] mb-8">
           <h4 className="font-bold text-lg mb-4">CONTACT WITH US</h4>
           <div className="flex gap-4 mb-4">
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">
+            <a href="https://www.facebook.com/profile.php?id=100022420636518" className="text-white hover:text-gray-300 transition-colors">
               <FaFacebook size={24} />
             </a>
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">
+            <a href="https://www.instagram.com/kigeli_34/?next=%2F" className="text-white hover:text-gray-300 transition-colors">
               <FaInstagram size={24} />
             </a>
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">
+            <a href="https://x.com/kigeli_34" className="text-white hover:text-gray-300 transition-colors">
               <FaTwitter size={24} />
             </a>
           </div>
@@ -68,16 +68,16 @@ export default function Footer() {
       {/* Footer Links */}
       <div className="container mx-auto flex flex-wrap justify-between gap-4 text-sm">
         <div className="flex flex-wrap gap-4">
-          <Link href="/terms" className="text-white hover:text-gray-300 transition-colors">
+          <Link href="/TermsOfService" className="text-white hover:text-gray-300 transition-colors">
             Terms & Conditions
           </Link>
-          <Link href="/privacy-policy" className="text-white hover:text-gray-300 transition-colors">
+          <Link href="/PrivacyPolicy" className="text-white hover:text-gray-300 transition-colors">
             Privacy Policy
           </Link>
-          <Link href="/do-not-sell" className="text-white hover:text-gray-300 transition-colors">
+          <Link href="/TermsOfService" className="text-white hover:text-gray-300 transition-colors">
             Do Not Sell My Info
           </Link>
-          <Link href="/accessibility" className="text-white hover:text-gray-300 transition-colors">
+          <Link href="/TermsOfService" className="text-white hover:text-gray-300 transition-colors">
             Accessibility
           </Link>
         </div>

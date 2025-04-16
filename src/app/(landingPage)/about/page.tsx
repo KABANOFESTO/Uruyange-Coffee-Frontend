@@ -187,62 +187,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Team Section - Added Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center text-yellow-600 mb-12">Meet Our Team</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden">
-                <Image
-                  src="/images/profile.jpg"
-                  alt="Team Member"
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  className="rounded-full"
-                />
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Abimana Marcellin</h3>
-              <p className="text-yellow-600 mb-4">Founder & Master Roaster</p>
-              <p className="text-gray-600">
-                With over 15 years of experience in coffee cultivation and roasting, Sarah leads our quality control team.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden">
-                <Image
-                  src="/images/martin.jpg"
-                  alt="Team Member"
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  className="rounded-full"
-                />
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Makuza Martin</h3>
-              <p className="text-yellow-600 mb-4">Head of Coffee Production</p>
-              <p className="text-gray-600">
-                Born and raised in Rwanda, Emmanuel brings authentic knowledge of local coffee traditions to our operations.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden">
-                <Image
-                  src="/images/me1.jpg"
-                  alt="Team Member"
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  className="rounded-full"
-                />
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">BYISHIMO Olivier</h3>
-              <p className="text-yellow-600 mb-4">Software Engineer</p>
-              <p className="text-gray-600">
-                A certified Q-grader with a refined palate, Maria ensures every batch meets our flavor standards.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Call to Action */}
       <section className="py-16 bg-gray-900 text-white">
