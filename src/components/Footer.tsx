@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+import React, { JSX } from 'react';
 
-export default function Footer() {
+export default function Footer(): JSX.Element {
   return (
     <footer className="bg-gray-800 text-white py-10 px-5 sm:px-10">
       {/* Main Footer Content */}
@@ -36,19 +37,34 @@ export default function Footer() {
         <div className="flex-1 min-w-[200px] mb-8">
           <h4 className="font-bold text-lg mb-4">CONTACT WITH US</h4>
           <div className="flex gap-4 mb-4">
-            <a href="https://www.facebook.com/profile.php?id=100022420636518" className="text-white hover:text-gray-300 transition-colors">
+            <a
+              href="https://www.facebook.com/share/16LG84Ndny/?mibextid=wwXIfr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white hover:text-gray-300 transition-colors"
+            >
               <FaFacebook size={24} />
             </a>
-            <a href="https://www.instagram.com/kigeli_34/?next=%2F" className="text-white hover:text-gray-300 transition-colors">
+            <a
+              href="https://www.instagram.com/abimana_marcellin?igsh=MXF4Mm04NDN0aDdtNQ%3D%3D&utm_source=qr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white hover:text-gray-300 transition-colors"
+            >
               <FaInstagram size={24} />
             </a>
-            <a href="https://x.com/kigeli_34" className="text-white hover:text-gray-300 transition-colors">
+            <a
+              href="https://x.com/marcellinabima1?s=21"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white hover:text-gray-300 transition-colors"
+            >
               <FaTwitter size={24} />
             </a>
           </div>
           <p className="font-semibold">SUPPORT</p>
           <a href="tel:+48452037323" className="text-white hover:text-gray-300 transition-colors">
-          +48 45 203 73 23
+            +8 45 203 73 23
           </a>
         </div>
       </div>
@@ -60,7 +76,6 @@ export default function Footer() {
         <p>and culture. We&rsquo;re honored to have you as a partner</p>
         <p>in this journey to revitalize black and brown entrepreneurship.</p>
       </div>
-
 
       {/* Divider */}
       <hr className="border-gray-600 my-8" />
