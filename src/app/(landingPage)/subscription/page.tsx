@@ -246,9 +246,10 @@ const PaymentForm = () => {
                 <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/images/me5.webp')" }}></div>
                 <div className="absolute inset-0 bg-black/50"></div>
                 <div className="relative z-10 px-6">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4">Discover the World Through Coffee</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4"> Subscribe for continous coffee delivery </h1>
                     <p className="mb-6 text-lg max-w-lg mx-auto">
-                        Explore single-origin coffees from the best growers worldwide. Delivered fresh to your door.
+                        Here is what soil offers as body booster. Coffee was meant to be enjoyed, once you are here you get stuck with sweetness! 
+                        Down we go for more
                     </p>
                 </div>
             </section>

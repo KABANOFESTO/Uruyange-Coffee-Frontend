@@ -26,7 +26,7 @@ const OurCoffee: React.FC = () => {
         <div className="relative z-10 px-6">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Discover the World Through Coffee</h1>
           <p className="mb-6 text-lg max-w-lg mx-auto">
-            Explore single-origin coffees from the best growers worldwide. Delivered fresh to your door.
+           Explore the special tasty coffee from African heart Rwanda
           </p>
           <button
             onClick={() => router.push("/coffees")}

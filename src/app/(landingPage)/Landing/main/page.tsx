@@ -12,7 +12,7 @@ export default function Banner() {
             TRY COFFEE FROM AROUND THE WORLD ®
           </h1>
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-8">
-            Coffee of the month club delivering exotic coffee to your door
+            Magical coffee to be delivered to your door, great coffee still exists.
           </h2>
           <Link href="/subscription">
             <button className="bg-yellow-500 text-black text-lg font-semibold py-3 px-6 rounded-lg hover:bg-yellow-600 transition-colors">
